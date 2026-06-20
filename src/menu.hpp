@@ -106,7 +106,7 @@ class Menu {
     Menu(std::initializer_list<std::shared_ptr<Dish>> l);
 
     Menu& operator=(const Menu &other);
-    void operator=(Menu &&other);
+    Menu& operator=(Menu &&other);
 
     size_t size() const;
 

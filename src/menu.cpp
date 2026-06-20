@@ -72,7 +72,9 @@ Menu& Menu::operator=(const Menu &other) {
     return *this;
 }
 
-void Menu::operator=(Menu &&other) {
+Menu& Menu::operator=(Menu &&other) {
+    dishes = std::move(other.dishes);
+    return *this;
 }
 
 size_t Menu::size() const { return dishes.size(); }
