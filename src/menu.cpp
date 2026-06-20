@@ -61,7 +61,7 @@ std::ostream &operator<<(std::ostream &out, const Order &order) { return out; }
  * Menu
  *****************************************************************************/
 
-Menu::Menu(const Menu &other) {}
+Menu::Menu(const Menu &other) : dishes(other.dishes) {}
 
 Menu::Menu(Menu &&other) {  }
 
