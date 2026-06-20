@@ -65,7 +65,7 @@ Menu::Menu(const Menu &other) {}
 
 Menu::Menu(Menu &&other) {  }
 
-Menu::Menu(std::initializer_list<std::shared_ptr<Dish>> l) {}
+Menu::Menu(std::initializer_list<std::shared_ptr<Dish>> l) : dishes(l) {}
 
 void Menu::operator=(const Menu &other) {
 }
