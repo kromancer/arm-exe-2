@@ -102,11 +102,11 @@ std::ostream &operator<<(std::ostream &out, const Order &order);
 class Menu {
   public:
     Menu(const Menu &other);
-    Menu(Menu &&other);
+    Menu(Menu &&other) noexcept;
     Menu(std::initializer_list<std::shared_ptr<Dish>> l);
 
     Menu& operator=(const Menu &other);
-    Menu& operator=(Menu &&other);
+    Menu& operator=(Menu &&other) noexcept;
 
     size_t size() const;
 

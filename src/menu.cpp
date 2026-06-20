@@ -63,7 +63,7 @@ std::ostream &operator<<(std::ostream &out, const Order &order) { return out; }
 
 Menu::Menu(const Menu &other) : dishes(other.dishes) {}
 
-Menu::Menu(Menu &&other) : dishes(std::move(other.dishes)) {}
+Menu::Menu(Menu &&other) noexcept : dishes(std::move(other.dishes)) {}
 
 Menu::Menu(std::initializer_list<std::shared_ptr<Dish>> l) : dishes(l) {}
 
@@ -72,7 +72,7 @@ Menu& Menu::operator=(const Menu &other) {
     return *this;
 }
 
-Menu& Menu::operator=(Menu &&other) {
+Menu& Menu::operator=(Menu &&other) noexcept {
     dishes = std::move(other.dishes);
     return *this;
 }
