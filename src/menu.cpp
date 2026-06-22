@@ -28,13 +28,25 @@
 Dish::Dish(const std::string &_name, unsigned _price)
     : name{_name}, price{_price} {}
 
+std::ostream& Dish::print(std::ostream &out) const {
+    return out << name << ", price: " << price;
+};
+
 Pizza::Pizza(const std::string &name, unsigned price) : Dish(name, price) {}
 
 Burger::Burger(const std::string &name, unsigned _weight, unsigned price)
-    : Dish(name, price) {}
+    : Dish(name, price), weight{_weight} {}
+
+std::ostream& Burger::print(std::ostream &out) const {
+    return Dish::print(out) << ", weight: " << weight;
+}
 
 Softdrink::Softdrink(const std::string &name, unsigned _volume, unsigned price)
-    : Dish(name, price) {}
+    : Dish(name, price), volume{_volume} {}
+
+std::ostream& Softdrink::print(std::ostream &out) const {
+    return Dish::print(out) << ", volume: " << volume;
+}
 
 IceCream::IceCream(const std::string &name, unsigned price)
     : Dish(name, price) {}
@@ -79,4 +91,9 @@ Menu& Menu::operator=(Menu &&other) noexcept {
 
 size_t Menu::size() const { return dishes.size(); }
 
-std::ostream &operator<<(std::ostream &out, const Menu &menu) { return out; }
+std::ostream& operator<<(std::ostream &out, const Menu &menu) {
+    for (const auto& dish : menu.dishes) {
+        dish->print(out) << std::endl;
+    }
+    return out;
+}

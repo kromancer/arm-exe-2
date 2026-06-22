@@ -36,6 +36,7 @@
 class Dish {
   public:
     Dish(const std::string &_name, unsigned _price = 0);
+    virtual std::ostream& print(std::ostream &out) const;
 
   private:
     const std::string name;
@@ -58,6 +59,9 @@ class Pizza : public Dish {
 class Burger : public Dish {
   public:
     Burger(const std::string &name, unsigned _weight = 0, unsigned price = 0);
+    std::ostream& print(std::ostream &out) const override;
+  private:
+    unsigned weight;
 };
 
 /*****************************************************************************
@@ -66,8 +70,10 @@ class Burger : public Dish {
 
 class Softdrink : public Dish {
   public:
-    Softdrink(const std::string &name, unsigned _volume = 0,
-              unsigned price = 0);
+    Softdrink(const std::string &name, unsigned _volume = 0, unsigned price = 0);
+    std::ostream& print(std::ostream &out) const override;
+  private:
+    unsigned volume;
 };
 
 /*****************************************************************************
@@ -115,8 +121,8 @@ class Menu {
         return nullptr;
     }
 
+  friend std::ostream &operator<<(std::ostream &out, const Menu &menu);
+
   private:
     std::vector<std::shared_ptr<Dish>> dishes;
 };
-
-std::ostream &operator<<(std::ostream &out, const Menu &menu);
