@@ -37,6 +37,7 @@ class Dish {
   public:
     Dish(const std::string &_name, unsigned _price = 0);
     virtual std::ostream& print(std::ostream &out) const;
+    unsigned getPrice() const { return price; };
 
   private:
     const std::string name;

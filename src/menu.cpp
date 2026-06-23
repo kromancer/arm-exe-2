@@ -64,7 +64,11 @@ void Order::operator+=(const std::shared_ptr<Dish> &other) {
 }
 
 unsigned Order::getTap() const {
-    return 0;
+    unsigned tap = 0;
+    for (const auto &dish : dishes) {
+        tap += dish->getPrice();
+    }
+    return tap;
 }
 
 std::ostream &operator<<(std::ostream &out, const Order &order) { return out; }
