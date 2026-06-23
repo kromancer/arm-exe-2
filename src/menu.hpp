@@ -35,6 +35,7 @@
 class Dish {
   public:
     Dish(const std::string &_name, unsigned _price = 0);
+    virtual ~Dish() = default;
     virtual std::ostream& print(std::ostream &out) const;
     unsigned getPrice() const { return price; };
     virtual bool matches(const Dish &d) const = 0;

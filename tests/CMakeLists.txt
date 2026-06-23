@@ -16,6 +16,8 @@
 
 add_executable(restaurant_unit_tests unit.cpp)
 
+target_compile_options(restaurant_unit_tests PRIVATE -Wall -Wextra -Wpedantic)
+
 target_link_libraries(restaurant_unit_tests PRIVATE
     GTest::gtest_main
     restaurant)
