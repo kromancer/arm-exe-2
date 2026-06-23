@@ -84,7 +84,7 @@ TEST(Restaurant, Order) {
 
     // Create another order, let restaurant select Cola size
     auto order2 = menu.makeOrder(Burger{"Burger", 90}, Softdrink{"Cola"});
-    ASSERT_NE(order1.get(), nullptr);
+    ASSERT_NE(order2.get(), nullptr);
 
     // Test that orders can be merged
     *order2 += *order1;
