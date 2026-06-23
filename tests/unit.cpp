@@ -99,3 +99,26 @@ TEST(Restaurant, Order) {
     auto order3 = menu.makeOrder(Pizza{"Calzone"}, Softdrink{"Cola", 33});
     ASSERT_EQ(order3.get(), nullptr);
 }
+
+TEST(Restaurant, DishMatching) {
+    Menu menu{std::make_shared<Pizza>("Margarita", 79),
+              std::make_shared<Burger>("Burger", 90, 67),
+              std::make_shared<Softdrink>("Cola", 33, 25),
+              std::make_shared<Softdrink>("Cola", 50, 35),
+              std::make_shared<IceCream>("Strawberry", 20)};
+
+    ASSERT_TRUE(menu.isAvailable(Pizza{"Margarita"}));
+    ASSERT_TRUE(menu.isAvailable(Burger{"Burger", 90}));
+    ASSERT_TRUE(menu.isAvailable(Softdrink{"Cola", 50}));
+    ASSERT_TRUE(menu.isAvailable(IceCream{"Strawberry"}));
+
+    // matching dishes should take into account the weight attribute of a Burger
+    ASSERT_FALSE(menu.isAvailable(Burger{"Burger", 91}));
+
+    // matching dishes should respect the type of dish object and not just look at the name
+    ASSERT_FALSE(menu.isAvailable(Burger{"Margarita", 79}));
+
+    // when multiple dishes match, the cheapest one should be returned
+    auto d = menu.findDish(Softdrink{"Cola"});
+    ASSERT_EQ((*d)->getPrice(), 25);
+}

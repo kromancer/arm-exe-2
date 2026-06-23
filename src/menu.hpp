@@ -21,7 +21,6 @@
  * Includes
  *****************************************************************************/
 
-#include <algorithm>
 #include <initializer_list>
 #include <iostream>
 #include <memory>
@@ -38,6 +37,10 @@ class Dish {
     Dish(const std::string &_name, unsigned _price = 0);
     virtual std::ostream& print(std::ostream &out) const;
     unsigned getPrice() const { return price; };
+    virtual bool matches(const Dish &d) const = 0;
+
+  protected:
+    bool isSameName(const Dish &other) const;
 
   private:
     const std::string name;
@@ -51,6 +54,7 @@ class Dish {
 class Pizza : public Dish {
   public:
     Pizza(const std::string &name, unsigned price = 0);
+    bool matches(const Dish &d) const override;
 };
 
 /*****************************************************************************
@@ -61,6 +65,7 @@ class Burger : public Dish {
   public:
     Burger(const std::string &name, unsigned _weight = 0, unsigned price = 0);
     std::ostream& print(std::ostream &out) const override;
+    bool matches(const Dish &d) const override;
   private:
     unsigned weight;
 };
@@ -73,6 +78,7 @@ class Softdrink : public Dish {
   public:
     Softdrink(const std::string &name, unsigned _volume = 0, unsigned price = 0);
     std::ostream& print(std::ostream &out) const override;
+    bool matches(const Dish &d) const override;
   private:
     unsigned volume;
 };
@@ -84,6 +90,7 @@ class Softdrink : public Dish {
 class IceCream : public Dish {
   public:
     IceCream(const std::string &name, unsigned price = 0);
+    bool matches(const Dish &d) const override;
 };
 
 /*****************************************************************************
@@ -116,6 +123,10 @@ class Menu {
     Menu& operator=(Menu &&other) noexcept;
 
     size_t size() const;
+
+    bool isAvailable(const Dish &dish) const;
+
+    std::vector<std::shared_ptr<Dish>>::const_iterator findDish(const Dish &dish) const;
 
     template <typename T, typename... Args>
     std::shared_ptr<Order> makeOrder(const T &dish, const Args... _dishes) {

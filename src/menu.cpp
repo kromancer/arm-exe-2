@@ -32,13 +32,28 @@ std::ostream& Dish::print(std::ostream &out) const {
     return out << name << ", price: " << price;
 };
 
+bool Dish::isSameName(const Dish &other) const {
+    return name == other.name;
+}
+
 Pizza::Pizza(const std::string &name, unsigned price) : Dish(name, price) {}
+
+bool Pizza::matches(const Dish &d) const {
+    const auto *pizza = dynamic_cast<const Pizza *>(&d);
+    return pizza && isSameName(d);
+}
 
 Burger::Burger(const std::string &name, unsigned _weight, unsigned price)
     : Dish(name, price), weight{_weight} {}
 
 std::ostream& Burger::print(std::ostream &out) const {
     return Dish::print(out) << ", weight: " << weight;
+}
+
+bool Burger::matches(const Dish &d) const {
+    const auto *burger = dynamic_cast<const Burger *>(&d);
+    // weight 0 means "unspecified", matches any weight.
+    return burger && isSameName(d) && (burger->weight == 0 || weight == burger->weight);
 }
 
 Softdrink::Softdrink(const std::string &name, unsigned _volume, unsigned price)
@@ -48,8 +63,19 @@ std::ostream& Softdrink::print(std::ostream &out) const {
     return Dish::print(out) << ", volume: " << volume;
 }
 
+bool Softdrink::matches(const Dish &d) const {
+    const auto *softdrink = dynamic_cast<const Softdrink *>(&d);
+    // volume 0 means "unspecified", matches any volume.
+    return softdrink && isSameName(d) && (softdrink->volume == 0 || volume == softdrink->volume);
+}
+
 IceCream::IceCream(const std::string &name, unsigned price)
     : Dish(name, price) {}
+
+bool IceCream::matches(const Dish &d) const {
+    const auto *ice = dynamic_cast<const IceCream *>(&d);
+    return ice && isSameName(d);
+}
 
 /*****************************************************************************
  * Order
@@ -94,6 +120,22 @@ Menu& Menu::operator=(Menu &&other) noexcept {
 }
 
 size_t Menu::size() const { return dishes.size(); }
+
+bool Menu::isAvailable(const Dish &dish) const {
+  return findDish(dish) != dishes.end();
+}
+
+std::vector<std::shared_ptr<Dish>>::const_iterator Menu::findDish(const Dish &dish) const {
+    auto best = dishes.end();
+    for (auto it = dishes.begin(); it != dishes.end(); ++it) {
+        if (!(*it)->matches(dish))
+            continue;
+        // Given behavior in unit test, if more than one dish matches a given request, pick the cheapest one
+        if (best == dishes.end() || (*it)->getPrice() < (*best)->getPrice())
+            best = it;
+    }
+    return best;
+}
 
 std::ostream& operator<<(std::ostream &out, const Menu &menu) {
     for (const auto& dish : menu.dishes) {
