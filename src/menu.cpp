@@ -97,7 +97,12 @@ unsigned Order::getTap() const {
     return tap;
 }
 
-std::ostream &operator<<(std::ostream &out, const Order &order) { return out; }
+std::ostream &operator<<(std::ostream &out, const Order &order) {
+    for (const auto& dish : order.dishes) {
+        dish->print(out) << std::endl;
+    }
+    return out;
+}
 
 /*****************************************************************************
  * Menu

@@ -103,11 +103,11 @@ class Order {
     void operator+=(const std::shared_ptr<Dish> &other);
     unsigned getTap() const;
 
+  friend std::ostream &operator<<(std::ostream &out, const Order &order);
+
   private:
     std::vector<std::shared_ptr<Dish>> dishes;
 };
-
-std::ostream &operator<<(std::ostream &out, const Order &order);
 
 /*****************************************************************************
  * Menu
