@@ -128,9 +128,37 @@ class Menu {
 
     std::vector<std::shared_ptr<Dish>>::const_iterator findDish(const Dish &dish) const;
 
-    template <typename T, typename... Args>
-    std::shared_ptr<Order> makeOrder(const T &dish, const Args... _dishes) {
+    // Base case
+    template <typename T>
+    std::shared_ptr<Order> makeOrder(const T &dish) {
+      auto it = findDish(dish);
+
+      if (it == dishes.end()) {
         return nullptr;
+      }
+
+      auto order = std::make_shared<Order>();
+      *order += *it;
+      return order;
+    }
+
+    // Recursive case
+    template <typename T, typename... Args>
+    std::shared_ptr<Order> makeOrder(const T &dish, const Args&... _dishes) {
+      auto firstDishOrder = makeOrder(dish);
+
+      if (!firstDishOrder) {
+        return nullptr;
+      }
+
+      auto remainingDishesOrder = makeOrder(_dishes...);
+
+      if (!remainingDishesOrder) {
+        return nullptr;
+      }
+
+      *firstDishOrder += *remainingDishesOrder;
+      return firstDishOrder;
     }
 
   friend std::ostream &operator<<(std::ostream &out, const Menu &menu);
